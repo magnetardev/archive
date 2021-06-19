@@ -2,7 +2,7 @@
 
 A port of libarchive to WebAssembly, with a simple JS wrapper.
 
-**It is _highly_ recommended that you offload reading and writing to a Worker.** For the browser or deno, that'd be through `Worker` and for node that would be through the `worker_threads` package. There isn't an official worker wrapper yet, but using a library like [Comlink](https://github.com/GoogleChromeLabs/comlink) can get you up and running with one in minutes.
+**It is _highly_ recommended that you offload reading and writing to a Worker.** For the browser or deno, that'd be through `Worker` and for node that would be through the `worker_threads` module. There isn't an official worker wrapper yet, but using a library like [Comlink](https://github.com/GoogleChromeLabs/comlink) can get you up and running with one in minutes.
 
 ### Why?
 
