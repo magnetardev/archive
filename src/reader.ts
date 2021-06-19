@@ -30,22 +30,10 @@ export default class ArchiveReader {
     this.ptr = undefined;
   }
 
-  readData(size: number): Uint8Array {
-    const ptr = this.api.mod._malloc(size);
-    const entry_len = this.api.read_data(this.archive, ptr, size);
-    const data = this.api.mod.HEAPU8.slice(ptr, ptr + entry_len);
-    this.api.mod._free(ptr);
-    return data;
-  }
-
-  skip(): void {
-    this.api.read_data_skip(this.archive);
-  }
-
-  private next(): ArchiveEntry | null {
+  next(): ArchiveEntry | null {
     const entryPtr = this.api.read_next_entry(this.archive);
     if (entryPtr === 0) return null;
-    return new ArchiveEntry(this, entryPtr);
+    return new ArchiveEntry(this, entryPtr, this.archive);
   }
 
   *entries() {
@@ -65,7 +53,11 @@ export default class ArchiveReader {
 class ArchiveEntry {
   public read: boolean = false;
 
-  constructor(private reader?: ArchiveReader, public ptr?: number) {}
+  constructor(
+    private reader?: ArchiveReader,
+    private ptr?: number,
+    private archive?: number
+  ) {}
 
   get filetype(): string {
     return (
@@ -92,19 +84,23 @@ class ArchiveEntry {
   }
 
   extract(): Uint8Array | undefined {
-    if (this.read) throw new Error("It has already been called.");
+    if (this.read) throw new Error("ERR_ALREADY_EXTRACTED");
     const size = this.size;
     if (!size) {
       this.skip();
       return undefined;
     }
     this.read = true;
-    return this.reader.readData(size);
+    const ptr = this.reader.api.mod._malloc(size);
+    const entry_len = this.reader.api.read_data(this.archive, ptr, size);
+    const data = this.reader.api.mod.HEAPU8.slice(ptr, ptr + entry_len);
+    this.reader.api.mod._free(ptr);
+    return data;
   }
 
   private skip(): void {
     if (this.read) return;
     this.read = true;
-    this.reader.skip();
+    this.reader.api.read_data_skip(this.archive);
   }
 }

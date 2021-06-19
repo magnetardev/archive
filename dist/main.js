@@ -151,21 +151,11 @@ class ArchiveReader {
         this.archive = undefined;
         this.ptr = undefined;
     }
-    readData(size) {
-        const ptr = this.api.mod._malloc(size);
-        const entry_len = this.api.read_data(this.archive, ptr, size);
-        const data = this.api.mod.HEAPU8.slice(ptr, ptr + entry_len);
-        this.api.mod._free(ptr);
-        return data;
-    }
-    skip() {
-        this.api.read_data_skip(this.archive);
-    }
     next() {
         const entryPtr = this.api.read_next_entry(this.archive);
         if (entryPtr === 0)
             return null;
-        return new ArchiveEntry(this, entryPtr);
+        return new ArchiveEntry(this, entryPtr, this.archive);
     }
     *entries() {
         for (;;) {
@@ -181,9 +171,10 @@ class ArchiveReader {
     }
 }
 class ArchiveEntry {
-    constructor(reader, ptr) {
+    constructor(reader, ptr, archive) {
         this.reader = reader;
         this.ptr = ptr;
+        this.archive = archive;
         this.read = false;
     }
     get filetype() {
@@ -206,20 +197,24 @@ class ArchiveEntry {
     }
     extract() {
         if (this.read)
-            throw new Error("It has already been called.");
+            throw new Error("ERR_ALREADY_EXTRACTED");
         const size = this.size;
         if (!size) {
             this.skip();
             return undefined;
         }
         this.read = true;
-        return this.reader.readData(size);
+        const ptr = this.reader.api.mod._malloc(size);
+        const entry_len = this.reader.api.read_data(this.archive, ptr, size);
+        const data = this.reader.api.mod.HEAPU8.slice(ptr, ptr + entry_len);
+        this.reader.api.mod._free(ptr);
+        return data;
     }
     skip() {
         if (this.read)
             return;
         this.read = true;
-        this.reader.skip();
+        this.reader.api.read_data_skip(this.archive);
     }
 }
 
