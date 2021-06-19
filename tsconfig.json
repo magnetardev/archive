@@ -1,0 +1,13 @@
+{
+  "include": ["src", "types"],
+  "compilerOptions": {
+    "module": "esnext",
+    "lib": ["ESNext", "WebWorker"],
+    "target": "ES2017",
+    "moduleResolution": "node",
+    "allowJs": true,
+    "noEmit": true,
+    "declaration": false,
+    "esModuleInterop": true
+  }
+}
