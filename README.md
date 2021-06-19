@@ -2,7 +2,7 @@
 
 A port of libarchive to WebAssembly, with a simple JS wrapper.
 
-**It is _highly_ recommended that you offload reading and writing to a Worker.** For the browser or deno, that'd be through `Worker` and for node that would be through the `worker_threads` package. There isn't an official worker wrapper yet, but using a library like [Comlink](https://github.com/GoogleChromeLabs/comlink) can get you up and running with one in minutes.
+**It is _highly_ recommended that you offload reading and writing to a Worker.** For the browser or deno, that'd be through `Worker` and for node that would be through the `worker_threads` module. There isn't an official worker wrapper yet, but using a library like [Comlink](https://github.com/GoogleChromeLabs/comlink) can get you up and running with one in minutes.
 
 ### Why?
 
@@ -35,7 +35,7 @@ const writer = await archive.createWriter();
 const contents = new TextEncoder().encode("hello, world!");
 writer.add("hello.txt", contents);
 
-// Finalize the archive and get a Uint8Array version.+
+// Finalize the archive and get a Uint8Array version.
 const zip = writer.close();
 console.log(zip);
 ```
@@ -47,10 +47,3 @@ Building is kind of a mess, but is quite easy with Docker. If you choose to do s
 1. Run `yarn build:wasm`. This can take quite a while the first time, but consecutive builds will be much faster. This builds just the WebAssembly port and the Emscripten wrapper.
 2. Run `yarn build`. This builds the JS wrapper.
 3. Done.
-
-## TO-DO
-
-- [ ] Allow creating more than just zip files.
-- [ ] Create a Worker wrapper.
-- [ ] Migrate Dockerfile from using `trzeci/emscripten` to `emscripten/emsdk`
-- [ ] Use jest or similar testing utils instead of just running and checking.
