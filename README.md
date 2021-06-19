@@ -47,10 +47,3 @@ Building is kind of a mess, but is quite easy with Docker. If you choose to do s
 1. Run `yarn build:wasm`. This can take quite a while the first time, but consecutive builds will be much faster. This builds just the WebAssembly port and the Emscripten wrapper.
 2. Run `yarn build`. This builds the JS wrapper.
 3. Done.
-
-## TO-DO
-
-- [ ] Allow creating more than just zip files.
-- [ ] Create a Worker wrapper.
-- [ ] Migrate Dockerfile from using `trzeci/emscripten` to `emscripten/emsdk`
-- [ ] Use jest or similar testing utils instead of just running and checking.
