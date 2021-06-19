@@ -36,7 +36,7 @@ const contents = new TextEncoder().encode("hello, world!");
 writer.add("hello.txt", contents);
 
 // Finalize the archive and get a Uint8Array version.+
-const zip = writer.finish();
+const zip = writer.close();
 console.log(zip);
 ```
 
