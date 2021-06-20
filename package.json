@@ -1,16 +1,17 @@
 {
   "name": "@magnetardev/archive",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "author": "Magnetar <contact@magnetar.dev>",
   "license": "MIT",
   "main": "dist/main.cjs",
   "browser": "dist/main.js",
-  "types": "./types/main.d.ts",
+  "types": "types/main.d.ts",
   "private": false,
   "files": [
     "dist/main.js",
     "dist/main.cjs",
-    "dist/archive.wasm"
+    "dist/archive.wasm",
+    "types/main.d.ts"
   ],
   "scripts": {
     "build:dockerimage": "docker image inspect -f '.' archive-wasm || docker build -t archive-wasm .",
