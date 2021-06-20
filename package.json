@@ -6,6 +6,12 @@
   "main": "dist/main.cjs",
   "browser": "dist/main.js",
   "types": "./types/main.d.ts",
+  "private": false,
+  "files": [
+    "dist/main.js",
+    "dist/main.cjs",
+    "dist/archive.wasm"
+  ],
   "scripts": {
     "build:dockerimage": "docker image inspect -f '.' archive-wasm || docker build -t archive-wasm .",
     "build:emscripten": "docker run -v $(pwd):/var/local archive-wasm",
