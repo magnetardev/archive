@@ -24,13 +24,14 @@ export default class ArchiveReader {
   }
 
   close() {
+    // this.api.read_close(this.archive);
     this.api.read_free(this.archive);
     this.api.mod._free(this.ptr);
     this.archive = undefined;
     this.ptr = undefined;
   }
 
-  next(): ArchiveEntry | null {
+  private next(): ArchiveEntry | null {
     const entryPtr = this.api.read_next_entry(this.archive);
     if (entryPtr === 0) return null;
     return new ArchiveEntry(this, entryPtr, this.archive);
@@ -51,7 +52,7 @@ export default class ArchiveReader {
 }
 
 class ArchiveEntry {
-  public read: boolean = false;
+  private read: boolean = false;
 
   constructor(
     private reader?: ArchiveReader,

@@ -13,12 +13,19 @@ var Module=typeof Module!=="undefined"?Module:{};var moduleOverrides={};var key;
 );
 })();
 
+const isNode = typeof process === "object" &&
+    typeof process.versions === "object" &&
+    typeof process.versions.node === "string";
 async function load() {
     // This is a weird way of doing this, but resolve was not resolving the Promise when mod was it's own variable.
     let v = {};
     v.ready = new Promise((resolve) => {
         v.mod = Module({
             onRuntimeInitialized: () => resolve(),
+            locateFile: (path, _) => {
+                let url = new URL(path, import.meta.url);
+                return isNode ? url.pathname : url.href;
+            },
         });
     });
     await v.ready;
@@ -40,6 +47,7 @@ async function load() {
             "number",
         ]),
         read_data_skip: mod.cwrap("archive_read_data_skip", "number", ["number"]),
+        // read_close: mod.cwrap("archive_close", null, ["number"]),
         read_free: mod.cwrap("archive_read_free", "number", ["number"]),
         // Entry methods
         entry_filetype: mod.cwrap("archive_entry_filetype", "number", ["number"]),
@@ -146,6 +154,7 @@ class ArchiveReader {
         return undefined;
     }
     close() {
+        // this.api.read_close(this.archive);
         this.api.read_free(this.archive);
         this.api.mod._free(this.ptr);
         this.archive = undefined;

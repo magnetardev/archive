@@ -1,21 +1,26 @@
 import Module, { Module as IModule } from "./archive";
+const isNode =
+  typeof process === "object" &&
+  typeof process.versions === "object" &&
+  typeof process.versions.node === "string";
 
 export interface WasmInterface {
   mod: IModule;
   // Read
-  read_memory: (ptr: number, len: number, password?: string) => number;
-  read_next_entry: (ptr: number) => number;
-  read_has_encrypted_entries: (ptr: number) => number;
-  read_data: (arg0: number, arg1: number, arg2: number) => number;
-  read_data_skip: (ptr: number) => number;
-  read_free: (ptr: number) => number;
+  read_memory(ptr: number, len: number, password?: string): number;
+  read_next_entry(ptr: number): number;
+  read_has_encrypted_entries(ptr: number): number;
+  read_data(arg0: number, arg1: number, arg2: number): number;
+  read_data_skip(ptr: number): number;
+  read_free(ptr: number): number;
+  // read_close(archive: number);
   // Entries
-  entry_filetype: (ptr: number) => number;
-  entry_pathname: (ptr: number) => string;
-  entry_size: (ptr: number) => number;
-  entry_is_encrypted: (ptr: number) => number;
+  entry_filetype(ptr: number): number;
+  entry_pathname(ptr: number): string;
+  entry_size(ptr: number): number;
+  entry_is_encrypted(ptr: number): number;
   // Write
-  write_memory: (filepath: string, format: string) => number;
+  write_memory(filepath: string, format: string): number;
   write_close(archive: number);
   write_entry(
     archive: number,
@@ -33,6 +38,10 @@ export default async function load(): Promise<WasmInterface> {
   v.ready = new Promise<void>((resolve) => {
     v.mod = Module({
       onRuntimeInitialized: () => resolve(),
+      locateFile: (path, _) => {
+        let url = new URL(path, import.meta.url);
+        return isNode ? url.pathname : url.href;
+      },
     });
   });
   await v.ready;
@@ -59,6 +68,7 @@ export default async function load(): Promise<WasmInterface> {
       "number",
     ]),
     read_data_skip: mod.cwrap("archive_read_data_skip", "number", ["number"]),
+    // read_close: mod.cwrap("archive_close", null, ["number"]),
     read_free: mod.cwrap("archive_read_free", "number", ["number"]),
     // Entry methods
     entry_filetype: mod.cwrap("archive_entry_filetype", "number", ["number"]),

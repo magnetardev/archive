@@ -1,6 +1,6 @@
 const libarchive = require("..");
 
-(async () => {
+test("compress: zip", async () => {
   // Write zip
   const writer = await libarchive.createWriter();
   const contents = new TextEncoder().encode("hi");
@@ -9,8 +9,9 @@ const libarchive = require("..");
 
   // Read zip
   const reader = await libarchive.createReader(zip);
-  for (const entry of reader) {
-    console.log(new TextDecoder().decode(entry.extract()));
-  }
+  let resp;
+  let raw = reader.entries().next().value.extract();
+  let str = new TextDecoder().decode(raw);
   reader.close();
-})();
+  expect(str).toBe("hi");
+});

@@ -16,6 +16,7 @@ export interface Module {
   HEAPU8: Uint8Array;
 
   onRuntimeInitialized: () => void;
+  locateFile: (path: string, prefix: string) => string;
   _malloc(size: number): number;
   _free(ptr: number): void;
 

@@ -12,11 +12,12 @@
     "build:wasm": "yarn run build:dockerimage && yarn run build:emscripten",
     "build": "rollup -c",
     "dev": "rollup -c -w",
-    "test": "node tests/node.js"
+    "test": "jest"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^8.2.1",
     "@types/node": "^14.14.36",
+    "jest": "^27.0.4",
     "rollup": "^2.42.4",
     "rollup-plugin-copy": "^3.4.0",
     "tslib": "^2.3.0",
