@@ -4,6 +4,16 @@ A port of libarchive to WebAssembly, with a simple JS wrapper.
 
 **It is _highly_ recommended that you offload reading and writing to a Worker.** For the browser or deno, that'd be through `Worker` and for node that would be through the `worker_threads` module. There isn't an official worker wrapper yet, but using a library like [Comlink](https://github.com/GoogleChromeLabs/comlink) can get you up and running with one in minutes.
 
+### Install
+
+```shell
+# if you use yarn:
+yarn add @magnetardev/archive
+
+# if you use npm:
+npm install @magnetardev/archive
+```
+
 ### Why?
 
 Aren't there a few of these ports? Well, yes. In fact, this uses the exact same Dockerfile from [libarchivejs](https://github.com/nika-begiashvili/libarchivejs). However, libarchivejs does not support Node and forces you to use a Worker. I also haven't found one that supports creating archives. Finally, the APIs most of the ports offer are not as simple as they can be, which is a shame. So, I made this.
