@@ -23,7 +23,7 @@ Aren't there a few of these ports? Well, yes. In fact, this uses the exact same 
 ### Reading an archive
 
 ```js
-import * as archive from 'archive';
+import * as archive from '@magnetardev/archive';
 
 const buffer = ...; // Obtain a Uint8Array version of your archive.
 const reader = await archive.createReader(buffer);
@@ -36,7 +36,7 @@ reader.close();
 ### Creating an archive
 
 ```js
-import * as archive from "archive";
+import * as archive from "@magnetardev/archive";
 
 // Create a writer.
 const writer = await archive.createWriter();
