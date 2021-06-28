@@ -1,6 +1,6 @@
 {
   "name": "@magnetardev/archive",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "author": "Magnetar <contact@magnetar.dev>",
   "license": "MIT",
   "main": "dist/node/main.js",
