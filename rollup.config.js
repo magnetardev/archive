@@ -16,9 +16,7 @@ export default {
   plugins: [
     typescript(),
     copy({
-      targets: [
-        { src: "./src/archive.wasm", dest: ["./dist/", "./dist/node"] },
-      ],
+      targets: [{ src: "./src/archive.wasm", dest: ["./dist/"] }],
     }),
   ],
 };
