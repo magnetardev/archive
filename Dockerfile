@@ -45,4 +45,4 @@ RUN cd /opt/libarchive-3.4.0 && emconfigure ./configure --enable-static --disabl
     emmake make 2>&1 | tee make.out && emmake make install
 
 WORKDIR /var/local
-CMD ["make", "build"]
+CMD ["make"]

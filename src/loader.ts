@@ -1,8 +1,4 @@
-import Module, { Module as IModule } from "./archive";
-const isNode =
-  typeof process === "object" &&
-  typeof process.versions === "object" &&
-  typeof process.versions.node === "string";
+import type { Module as IModule } from "./archive";
 
 export interface WasmInterface {
   mod: IModule;
@@ -21,7 +17,7 @@ export interface WasmInterface {
   entry_is_encrypted(ptr: number): number;
   // Write
   write_memory(filepath: string, format: string): number;
-  write_close(archive: number);
+  write_close(archive: number): void;
   write_entry(
     archive: number,
     filename: string,
@@ -29,25 +25,15 @@ export interface WasmInterface {
     fileperm: number,
     buf: number,
     buf_size: number
-  );
+  ): void;
 }
 
-export default async function load(): Promise<WasmInterface> {
-  // This is a weird way of doing this, but resolve was not resolving the Promise when mod was it's own variable.
-  let v: any = {};
-  v.ready = new Promise<void>((resolve) => {
-    v.mod = Module({
-      onRuntimeInitialized: () => resolve(),
-      locateFile: (path, _) => {
-        let url = new URL(path, import.meta.url);
-        return isNode ? url.pathname : url.href;
-      },
-    });
-  });
-  await v.ready;
-
-  // Now we wrap it
-  let mod = v.mod as IModule;
+export default async function load(
+  options: Partial<IModule> = {}
+): Promise<WasmInterface> {
+  let mod = (await import("./archive").then(({ default: initModule }) =>
+    initModule(options)
+  )) as IModule;
   return {
     mod,
     // Read Methods
@@ -68,7 +54,6 @@ export default async function load(): Promise<WasmInterface> {
       "number",
     ]),
     read_data_skip: mod.cwrap("archive_read_data_skip", "number", ["number"]),
-    // read_close: mod.cwrap("archive_close", null, ["number"]),
     read_free: mod.cwrap("archive_read_free", "number", ["number"]),
     // Entry methods
     entry_filetype: mod.cwrap("archive_entry_filetype", "number", ["number"]),

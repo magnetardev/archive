@@ -4,3 +4,4 @@ node_modules
 .yarn
 .pnp.js
 .DS_Store
+src/archive.*

@@ -6,17 +6,19 @@ export default {
   output: [
     {
       format: "esm",
-      file: "dist/main.js",
+      dir: "dist/",
     },
     {
       format: "cjs",
-      file: "dist/main.cjs",
+      dir: "dist/node/",
     },
   ],
   plugins: [
     typescript(),
     copy({
-      targets: [{ src: "./src/archive.wasm", dest: ["./dist/"] }],
+      targets: [
+        { src: "./src/archive.wasm", dest: ["./dist/", "./dist/node"] },
+      ],
     }),
   ],
 };

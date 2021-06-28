@@ -5,7 +5,7 @@ interface Types {
   boolean: boolean;
 }
 
-type TypeName = keyof Types;
+type TypeName = keyof Types | null;
 type TypeNameMap<T> = T extends null
   ? null
   : T extends TypeName

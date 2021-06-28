@@ -638,6 +638,7 @@ __metadata:
   dependencies:
     "@rollup/plugin-typescript": ^8.2.1
     "@types/node": ^14.14.36
+    comlink: ^4.3.1
     jest: ^27.0.4
     rollup: ^2.42.4
     rollup-plugin-copy: ^3.4.0
@@ -1386,6 +1387,13 @@ __metadata:
   dependencies:
     delayed-stream: ~1.0.0
   checksum: 5791ce7944530f0db74a97e77ea28b6fdbf89afcf038e41d6b4195019c4c803cd19ed2905a54959e5b3830d50bd5d6f93c681c6d3aaea8614ad43b48e62e9d65
+  languageName: node
+  linkType: hard
+
+"comlink@npm:^4.3.1":
+  version: 4.3.1
+  resolution: "comlink@npm:4.3.1"
+  checksum: 8bb5ccc7f44fd557a76bfcaaba6f536108c8222be9faec8e532934e751ebbf0c6decbbc4c83beb1625dc8f15d936a9b7c33ac97928dba9157dc99efae0cadb0e
   languageName: node
   linkType: hard
 

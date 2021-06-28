@@ -12,11 +12,16 @@ export default class ArchiveReader {
   ) {
     let ptr = api.mod._malloc(buf.length);
     api.mod.HEAPU8.set(buf, ptr);
-    this.archive = api.read_memory(ptr, buf.length, password);
+    this.archive = api.read_memory(
+      ptr,
+      buf.length,
+      password as string | undefined
+    );
     this.ptr = ptr;
   }
 
   get hasEncryptedEntries() {
+    if (!this.archive) throw new Error("ERR_NO_ARCHIVE");
     const resp = this.api.read_has_encrypted_entries(this.archive);
     if (resp === 0 || resp === -2) return false;
     if (resp > 0) return true;
@@ -24,14 +29,16 @@ export default class ArchiveReader {
   }
 
   close() {
-    // this.api.read_close(this.archive);
+    if (!this.archive) throw new Error("ERR_NO_ARCHIVE");
     this.api.read_free(this.archive);
+    if (!this.ptr) throw new Error("ERR_NO_PTR");
     this.api.mod._free(this.ptr);
     this.archive = undefined;
     this.ptr = undefined;
   }
 
   private next(): ArchiveEntry | null {
+    if (!this.archive) throw new Error("ERR_NO_ARCHIVE");
     const entryPtr = this.api.read_next_entry(this.archive);
     if (entryPtr === 0) return null;
     return new ArchiveEntry(this, entryPtr, this.archive);
@@ -61,20 +68,26 @@ class ArchiveEntry {
   ) {}
 
   get filetype(): string {
+    if (!this.reader || !this.ptr) throw new Error("ERR_NO_READER");
     return (
       FileTypeMap.get(this.reader.api.entry_filetype(this.ptr)) ?? "Invalid"
     );
   }
 
   get path(): string {
+    if (!this.reader || !this.ptr) throw new Error("ERR_NO_READER");
     return this.reader.api.entry_pathname(this.ptr);
   }
 
   get size(): number {
+    if (!this.reader || !this.ptr) throw new Error("ERR_NO_READER");
+
     return this.reader.api.entry_size(this.ptr);
   }
 
   get encrypted(): boolean {
+    if (!this.reader || !this.ptr) throw new Error("ERR_NO_READER");
+
     return !!this.reader.api.entry_is_encrypted(this.ptr);
   }
 
@@ -85,6 +98,8 @@ class ArchiveEntry {
   }
 
   extract(): Uint8Array | undefined {
+    if (!this.reader || !this.ptr || !this.archive)
+      throw new Error("ERR_NO_READER");
     if (this.read) throw new Error("ERR_ALREADY_EXTRACTED");
     const size = this.size;
     if (!size) {
@@ -100,6 +115,8 @@ class ArchiveEntry {
   }
 
   private skip(): void {
+    if (!this.reader || !this.ptr || !this.archive)
+      throw new Error("ERR_NO_READER");
     if (this.read) return;
     this.read = true;
     this.reader.api.read_data_skip(this.archive);

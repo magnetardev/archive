@@ -1,5 +1,9 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
 async function load(options = {}) {
-    let mod = (await import('./archive-955c4748.js').then(({ default: initModule }) => initModule(options)));
+    let mod = (await Promise.resolve().then(function () { return require('./archive-c40290d0.js'); }).then(({ default: initModule }) => initModule(options)));
     return {
         mod,
         // Read Methods
@@ -308,4 +312,6 @@ const util = {
     permString,
 };
 
-export { createReader, createWriter, util };
+exports.createReader = createReader;
+exports.createWriter = createWriter;
+exports.util = util;

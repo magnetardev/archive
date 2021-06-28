@@ -3,23 +3,20 @@
   "version": "1.0.2",
   "author": "Magnetar <contact@magnetar.dev>",
   "license": "MIT",
-  "main": "dist/main.cjs",
+  "main": "dist/node/main.js",
   "browser": "dist/main.js",
   "types": "types/main.d.ts",
-  "private": false,
   "files": [
-    "dist/main.js",
-    "dist/main.cjs",
-    "dist/archive.wasm",
-    "types/main.d.ts",
+    "dist",
+    "types",
     "src"
   ],
   "scripts": {
     "build:dockerimage": "docker image inspect -f '.' archive-wasm || docker build -t archive-wasm .",
     "build:emscripten": "docker run -v $(pwd):/var/local archive-wasm",
     "build:wasm": "yarn run build:dockerimage && yarn run build:emscripten",
-    "build": "rollup -c",
-    "dev": "rollup -c -w",
+    "build": "make clean && yarn build:wasm && rollup -c",
+    "dev": "make clean && yarn build:wasm && rollup -c -w",
     "test": "jest"
   },
   "devDependencies": {
@@ -30,5 +27,8 @@
     "rollup-plugin-copy": "^3.4.0",
     "tslib": "^2.3.0",
     "typescript": "^4.3.4"
+  },
+  "dependencies": {
+    "comlink": "^4.3.1"
   }
 }

@@ -3,7 +3,7 @@ import ArchiveWriter, { ArchiveType } from "../src/writer";
 import type { FilePerm, FileType } from "../src/util";
 
 export function createReader(
-  buffer: Int8Array,
+  buffer: Uint8Array,
   password?: string
 ): Promise<ArchiveReader>;
 

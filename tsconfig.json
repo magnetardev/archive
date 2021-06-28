@@ -2,12 +2,18 @@
   "include": ["src", "types"],
   "compilerOptions": {
     "module": "esnext",
-    "lib": ["ESNext", "WebWorker"],
-    "target": "ES2017",
+    "target": "es2017",
+    "lib": ["esnext", "DOM", "WebWorker"],
     "moduleResolution": "node",
-    "allowJs": true,
+    "allowSyntheticDefaultImports": true,
+    "importsNotUsedAsValues": "error",
+    "strict": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "useDefineForClassFields": true,
     "noEmit": true,
-    "declaration": false,
-    "esModuleInterop": true
+    "allowJs": true,
+    "baseUrl": "./"
   }
 }
