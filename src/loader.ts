@@ -1,4 +1,4 @@
-import type { Module as IModule } from "./archive";
+import initModule, { Module as IModule } from "./archive";
 
 export interface WasmInterface {
   mod: IModule;
@@ -31,9 +31,7 @@ export interface WasmInterface {
 export default async function load(
   options: Partial<IModule> = {}
 ): Promise<WasmInterface> {
-  let mod = (await import("./archive").then(({ default: initModule }) =>
-    initModule(options)
-  )) as IModule;
+  let mod = (await initModule(options)) as IModule;
   return {
     mod,
     // Read Methods

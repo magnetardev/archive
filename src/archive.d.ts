@@ -37,9 +37,5 @@ export interface Module {
   };
 }
 
-declare const ModuleFunction: (
-  module?: Partial<Module>,
-  ...args: unknown[]
-) => Module;
-
-export default ModuleFunction;
+declare const moduleFunction: (options: Partial<Module>) => Promise<Module>;
+export default moduleFunction;

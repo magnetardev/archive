@@ -6,11 +6,11 @@ export default {
   output: [
     {
       format: "esm",
-      dir: "dist/",
+      file: "dist/main.js",
     },
     {
       format: "cjs",
-      dir: "dist/node/",
+      file: "dist/main.cjs",
     },
   ],
   plugins: [

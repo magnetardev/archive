@@ -1,3 +1,7 @@
+'use strict';
+
+Object.defineProperty(exports, '__esModule', { value: true });
+
 var initModule = (config) => new Promise((resolve, reject) => {
   var Module = typeof config !== "undefined" ? config : {};
   var originalOnAbortFunction = Module["onAbort"];
@@ -325,4 +329,6 @@ const util = {
     permString,
 };
 
-export { createReader, createWriter, util };
+exports.createReader = createReader;
+exports.createWriter = createWriter;
+exports.util = util;
