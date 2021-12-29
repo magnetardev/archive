@@ -1,7 +1,8 @@
-compile_flags.txt
-node_modules
-.yarnrc.yml
 .yarn
-.pnp.js
+node_modules
+.pnp*
+lib/depends
+.parcel-cache
+src/archive.js
+src/archive.wasm
 .DS_Store
-src/archive.*
