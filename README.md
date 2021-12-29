@@ -1,34 +1,39 @@
-# Archive
+# @magnetardev/archive
 
 A port of libarchive to WebAssembly, with a simple JS wrapper.
 
-**It is _highly_ recommended that you offload reading and writing to a Worker.** For the browser or deno, that'd be through `Worker` and for node that would be through the `worker_threads` module. There isn't an official worker wrapper yet, but using a library like [Comlink](https://github.com/GoogleChromeLabs/comlink) can get you up and running with one in minutes.
+**It is highly recommended that you offload reading and writing to a Worker.** For the browser or deno, that'd be through Worker and for node that would be through the worker_threads module. There isn't an official worker wrapper yet, but using a library like Comlink can get you up and running with one in minutes.
 
-### Install
+## Install
 
 ```shell
-# if you use yarn:
+# if you use npm
+npm install @magnetardev/archive
+
+# if you use yarn
 yarn add @magnetardev/archive
 
-# if you use npm:
-npm install @magnetardev/archive
+# if you use pnpm
+pnpm install @magnetardev/archive
 ```
 
-### Why?
+## Why?
 
-Aren't there a few of these ports? Well, yes. In fact, this uses the exact same Dockerfile from [libarchivejs](https://github.com/nika-begiashvili/libarchivejs). However, libarchivejs does not support Node and forces you to use a Worker. I also haven't found one that supports creating archives. Finally, the APIs most of the ports offer are not as simple as they can be, which is a shame. So, I made this.
+Because other archive libs for the web are fairly lackluster. They either are written fully in JS/TS, which (in my opinion) is not suitable for something like compression/decompression. Or they are written in WebAssembly (yay!) with a limited set of features or a confusing API (oof).
 
-## Examples
+I wanted something that was simple, fast, and easy to use. So, I wrote my own.
+
+## Usage
 
 ### Reading an archive
 
 ```js
-import * as archive from '@magnetardev/archive';
+import { createReader } from "@magnetardev/archive";
 
-const buffer = ...; // Obtain a Uint8Array version of your archive.
-const reader = await archive.createReader(buffer);
-for (const entry of reader) {
-  console.log(entry.path, entry.extract());
+const buffer = ...; // some archive file (as an ArrayBuffer)
+const reader = await createReader(buffer);
+for (const file of reader) {
+  console.log(file.path, file.extract());
 }
 reader.close();
 ```
@@ -36,24 +41,16 @@ reader.close();
 ### Creating an archive
 
 ```js
-import * as archive from "@magnetardev/archive";
+import { createWriter } from "@magnetardev/archive";
 
-// Create a writer.
-const writer = await archive.createWriter();
+// create a writer and add a README file to it
+const writer = await createWriter("7z");
+const contents = new TextEncoder().encode("hello, world!"); // get string as Uint8Array
+writer.add("README.md", contents);
 
-// Add a file
-const contents = new TextEncoder().encode("hello, world!");
-writer.add("hello.txt", contents);
-
-// Finalize the archive and get a Uint8Array version.
-const zip = writer.close();
-console.log(zip);
+// finish and get the archive file
+const file = await writer.close();
+console.log(file);
 ```
 
-## Building
-
-Building is kind of a mess, but is quite easy with Docker. If you choose to do so without Docker, you need to compile OpenSSL, LZMA, and libarchive with `emcc`. This short guide covers the Docker build process:
-
-1. Run `yarn build:wasm`. This can take quite a while the first time, but consecutive builds will be much faster. This builds just the WebAssembly port and the Emscripten wrapper.
-2. Run `yarn build`. This builds the JS wrapper.
-3. Done.
+# Building

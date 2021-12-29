@@ -31,11 +31,9 @@ const void *archive_read_next_entry(void *archive) {
 #pragma mark - Write
 
 EMSCRIPTEN_KEEPALIVE
-struct archive *archive_write_memory(const char *file_name, const char *format) {
+struct archive *archive_write_memory(const char *file_name, int format) {
   struct archive *a = archive_write_new();
-  if (strcmp(format, "zip") == 0) {
-    archive_write_set_format_zip(a);
-  }
+  archive_write_set_format(a, format);
   archive_write_open_filename(a, file_name);
   return a;
 }
