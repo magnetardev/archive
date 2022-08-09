@@ -26,6 +26,7 @@
 		"test": "vitest run"
 	},
 	"devDependencies": {
+		"@types/node": "^18.6.5",
 		"prettier": "^2.7.1",
 		"typescript": "^4.6.4",
 		"vite": "^3.0.0",

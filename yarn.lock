@@ -23,6 +23,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@magnetardev/archive@workspace:."
   dependencies:
+    "@types/node": ^18.6.5
     prettier: ^2.7.1
     typescript: ^4.6.4
     vite: ^3.0.0
@@ -211,7 +212,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*":
+"@types/node@npm:*, @types/node@npm:^18.6.5":
   version: 18.6.5
   resolution: "@types/node@npm:18.6.5"
   checksum: e3e66c9a84b94010a57c1b9dac882c08484278d74f9d120dbe6a3e45d00740d178bd1d34a5deee28197c94b9f4359153b637bab9b305328e865027e9987a0f3d
