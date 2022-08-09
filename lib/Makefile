@@ -4,8 +4,15 @@ BASH = emmake bash
 EMMAKE = emmake make
 EMCMAKE = emcmake cmake
 CONFIGURE = emconfigure
-LD_FLAGS = -s USE_ZLIB=1 -s USE_BZIP2=1 -s ALLOW_MEMORY_GROWTH=1 -s EXPORTED_RUNTIME_METHODS="['cwrap', 'FS']"
-
+LD_FLAGS = -s USE_ZLIB=1 -s USE_BZIP2=1 -s ALLOW_MEMORY_GROWTH=1 -s EXPORTED_RUNTIME_METHODS="['cwrap', 'FS']" -s EXPORTED_FUNCTIONS="['_free', \
+	'_archive_read_has_encrypted_entries', \
+	'_archive_read_data', \
+	'_archive_read_data_skip', \
+	'_archive_read_free', \
+	'_archive_entry_filetype', \
+	'_archive_entry_pathname_utf8', \
+	'_archive_entry_size', \
+	'_archive_entry_is_encrypted']"
 DEPENDS_DIR=./depends/
 
 # Dependency URLs

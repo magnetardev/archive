@@ -1,4 +1,4 @@
-/// <reference types="vite" />
+/// <reference types="vite/client" />
 
 interface Types {
 	string: string;

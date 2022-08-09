@@ -12,6 +12,7 @@
 
 #pragma mark - Read
 
+
 EMSCRIPTEN_KEEPALIVE
 const void *archive_read_memory(const void *buf, size_t size, const char *passphrase) {
   struct archive *a = archive_read_new();

@@ -44,6 +44,7 @@ export default async function load(options: Partial<IModule> = {}): Promise<Wasm
 		read_data: mod.cwrap("archive_read_data", "number", ["number", "number", "number"]),
 		read_data_skip: mod.cwrap("archive_read_data_skip", "number", ["number"]),
 		read_free: mod.cwrap("archive_read_free", "number", ["number"]),
+
 		// Entry methods
 		entry_filetype: mod.cwrap("archive_entry_filetype", "number", ["number"]),
 		entry_pathname: mod.cwrap("archive_entry_pathname_utf8", "string", ["number"]),
