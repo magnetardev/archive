@@ -2,7 +2,7 @@
 
 A port of libarchive to WebAssembly, with a simple JS wrapper.
 
-**It is highly recommended that you offload reading and writing to a Worker.** For the browser or deno, that'd be through Worker and for node that would be through the worker_threads module. There isn't an official worker wrapper yet, but using a library like Comlink can get you up and running with one in minutes.
+**It is highly recommended that you offload reading and writing to a Worker.** For the browser or deno, that'd be through `Worker` and for node that would be through the `worker_threads` module. There isn't an official worker wrapper, but using a library like Comlink can get you up and running with one in minutes.
 
 ## Install
 
@@ -64,9 +64,7 @@ _It should only need to run `CMD ["make"]` in the lib/ directory._
 -   Emscripten
 -   `make`
 -   `node`
--   `deno` (optional, used for linting)
--   `dprint` (optional, used for formatting)
--   `yarn` (optional, preferred package manager)
+-   `yarn` (preferred package manager)
 
 ### Steps
 
