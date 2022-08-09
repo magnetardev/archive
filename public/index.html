@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Testing</title>
+	</head>
+	<body>
+		<script>
+			const tests = [];
+
+			async function test(name, handler) {
+				tests.push(
+					handler()
+						.then(() => ({ name, success: true }))
+						.catch((error) => ({ name, success: false, error: error.message }))
+				);
+			}
+
+			window.waitForTests = function () {
+				return Promise.all(tests);
+			};
+
+			// @ts-ignore
+			window.waitForTests = waitForTests;
+
+			// expect
+
+			class ExpectResult {
+				#value;
+				#message;
+
+				constructor(value, message) {
+					this.#value = value;
+					this.#message = message;
+				}
+
+				toBeDefined() {
+					if (this.#value === undefined) throw new Error(this.#message || "Expected value to be defined");
+				}
+
+				toBe(value) {
+					if (this.#value !== value)
+						throw new Error(this.#message || "Expected value to be " + value + " but got " + this.#value);
+				}
+			}
+
+			function expect(value, message) {
+				return new ExpectResult(value, message);
+			}
+		</script>
+		<script type="module">
+			import { createReader, createWriter } from "./index.mjs";
+
+			async function readFileFromArchive(buffer, fileName) {
+				const reader = await createReader(buffer);
+				let fileData;
+				for (const file of reader) {
+					if (fileName !== file.path) continue;
+					fileData = file.extract();
+				}
+				reader.close();
+				return fileData;
+			}
+
+			function loadArchive(file) {
+				return fetch(file).then((res) => res.arrayBuffer());
+			}
+
+			test("zip", async () => {
+				const buffer = await loadArchive("./examples/test.zip");
+				const fileData = await readFileFromArchive(buffer, "test.txt");
+				expect(fileData, "file data to exist").toBeDefined();
+				let text = new TextDecoder().decode(fileData);
+				expect(text, "file data to be correct").toBe("test\n");
+			});
+		</script>
+	</body>
+</html>

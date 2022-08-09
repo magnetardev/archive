@@ -22,7 +22,7 @@ export const filePerm = (user: FilePerm, group: FilePerm, other: FilePerm) => 0 
  * @param perm
  * @returns
  */
-export const permString = (perm: number) => {
+export const filePermString = (perm: number) => {
 	// user
 	return (
 		(perm & 0o000400 ? "r" : "-") +

@@ -16,17 +16,20 @@
 		".": {
 			"import": "./dist/index.mjs",
 			"require": "./dist/index.umd.cjs"
-		}
+		},
+		"./archive.wasm": "./dist/archive.wasm"
 	},
 	"scripts": {
 		"build:wasm": "cd lib && make ../src/archive.js && cd ..",
 		"dev": "vite",
 		"build": "tsc && vite build",
 		"fmt": "prettier -w .",
-		"test": "vitest run"
+		"test": "vite build && vitest run"
 	},
 	"devDependencies": {
+		"@playwright/test": "^1.24.2",
 		"@types/node": "^18.6.5",
+		"playwright": "^1.24.2",
 		"prettier": "^2.7.1",
 		"typescript": "^4.6.4",
 		"vite": "^3.0.0",

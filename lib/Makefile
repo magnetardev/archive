@@ -79,6 +79,8 @@ $(LIBARCHIVE_DEPENDS): $(DEPENDS_DIR)libarchive.zip
 	mv $@ $@.tmp
 	cat pre.js $@.tmp post.js > $@
 	@rm $@.tmp 
+	mkdir -p ../public
+	@mv ../src/archive.wasm ../public/
 
 clean:
-	@rm -rf $(DEPENDS_DIR) ../src/archive.js ../src/archive.wasm
+	@rm -rf $(DEPENDS_DIR) ../src/archive.js ../public/archive.wasm

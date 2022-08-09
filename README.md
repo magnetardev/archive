@@ -73,3 +73,7 @@ _It should only need to run `CMD ["make"]` in the lib/ directory._
 3. `yarn install`
 4. `yarn build:wasm`
 5. `yarn build`
+
+## Testing
+
+Testing is pretty scuffed at the moment, at least for browsers. Browser tests are written in /public/index.html, so it can be loaded by the preview server. Ideally it should be written in the /test/ directory, but that would mean setting up a new dev server.

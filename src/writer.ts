@@ -1,4 +1,5 @@
-import { WasmInterface } from "./loader";
+import type { WasmInterface } from "./loader";
+import { ERR_BUFFER_RETRIEVAL_FAILED, ERR_NO_ARCHIVE } from "./util/error_strings";
 import { FileType } from "./util/file_types";
 
 export const ARCHIVE_WRITE_FORMATS = {
@@ -34,21 +35,22 @@ export class ArchiveWriter {
 	constructor(private api: WasmInterface, type: ArchiveWriteFormat) {
 		const format = ARCHIVE_WRITE_FORMATS[type];
 		this.fileName = `archive_${archiveID++}.tmp`;
-		this.archive = api.write_memory(this.fileName, format);
+		this.archive = api.writeMemory(this.fileName, format);
 	}
 
 	add(path: string, buffer: Uint8Array, type: FileType = FileType.File, perm = 0o777) {
-		if (!this.archive) throw new Error("ERR_NO_ARCHIVE");
+		if (!this.archive) throw new Error(ERR_NO_ARCHIVE);
 		const ptr = this.api.mod._malloc(buffer.length);
 		this.api.mod.HEAPU8.set(buffer, ptr);
-		this.api.write_entry(this.archive, path, type, perm, ptr, buffer.length);
+		this.api.writeEntry(this.archive, path, type, perm, ptr, buffer.length);
 	}
 
 	close(): Uint8Array | undefined {
-		if (!this.archive) throw new Error("ERR_NO_ARCHIVE");
-		this.api.write_close(this.archive);
+		if (!this.archive) throw new Error(ERR_NO_ARCHIVE);
+		this.api.writeClose(this.archive);
 		const file = this.api.mod.FS.readFile(this.fileName);
 		this.api.mod.FS.unlink(this.fileName);
+		if (!file) throw new Error(ERR_BUFFER_RETRIEVAL_FAILED);
 		return file;
 	}
 }
