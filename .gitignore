@@ -6,3 +6,6 @@ lib/depends
 src/archive.js
 src/archive.wasm
 .DS_Store
+dist
+foo
+.vscode

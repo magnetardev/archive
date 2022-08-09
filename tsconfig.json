@@ -1,7 +1,20 @@
 {
-  "compilerOptions": {
-    "module": "esnext",
-    "lib": ["ESNext", "DOM"],
-    "target": "ES2017"
-  }
+	"compilerOptions": {
+		"target": "ES2017",
+		"useDefineForClassFields": true,
+		"module": "ESNext",
+		"lib": ["ESNext", "DOM"],
+		"moduleResolution": "Node",
+		"strict": true,
+		"sourceMap": true,
+		"resolveJsonModule": true,
+		"isolatedModules": true,
+		"esModuleInterop": true,
+		"noEmit": true,
+		"noUnusedLocals": true,
+		"noUnusedParameters": true,
+		"noImplicitReturns": true,
+		"skipLibCheck": true
+	},
+	"include": ["src", "test/index.test.ts"]
 }

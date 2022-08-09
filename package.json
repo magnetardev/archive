@@ -1,33 +1,35 @@
 {
-  "name": "@magnetardev/archive",
-  "version": "2.0.0",
-  "description": "A simpler archive library for the web.",
-  "source": "src/index.ts",
-  "main": "dist/mod.cjs",
-  "module": "dist/mod.mjs",
-  "types": "dist/types.d.ts",
-  "repository": "https://github.com/magnetardev/archive",
-  "author": "Magnetar <contact@magnetar.dev>",
-  "license": "MIT",
-  "scripts": {
-    "build:wasm": "cd lib && make ../src/archive.js && cd ..",
-    "dev": "parcel watch --no-content-hash",
-    "build": "parcel build --no-content-hash",
-    "lint": "deno lint --ignore=node_modules,dist,.yarn,lib,src/archive.js",
-    "format": "dprint fmt"
-  },
-  "devDependencies": {
-    "@parcel/packager-ts": "^2.0.1",
-    "@parcel/transformer-typescript-types": "^2.0.1",
-    "parcel": "^2.0.1",
-    "typescript": ">=3.0.0"
-  },
-  "alias": {
-    "fs": false,
-    "path": false,
-    "process": false,
-    "crypto": false,
-    "buffer": false
-  },
-  "packageManager": "yarn@3.1.1"
+	"name": "@magnetardev/archive",
+	"version": "2.0.0",
+	"description": "A simpler archive library for the web.",
+	"repository": "https://github.com/magnetardev/archive.git",
+	"author": "Magnetar <contact@magnetar.dev>",
+	"license": "MIT",
+	"packageManager": "yarn@3.2.2",
+	"types": "dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"main": "./dist/index.umd.cjs",
+	"module": "./dist/index.mjs",
+	"exports": {
+		".": {
+			"import": "./dist/index.mjs",
+			"require": "./dist/index.umd.cjs"
+		}
+	},
+	"scripts": {
+		"build:wasm": "cd lib && make ../src/archive.js && cd ..",
+		"dev": "vite",
+		"build": "tsc && vite build",
+		"fmt": "prettier -w .",
+		"test": "vitest run"
+	},
+	"devDependencies": {
+		"prettier": "^2.7.1",
+		"typescript": "^4.6.4",
+		"vite": "^3.0.0",
+		"vite-plugin-dts": "^1.4.1",
+		"vitest": "^0.21.0"
+	}
 }

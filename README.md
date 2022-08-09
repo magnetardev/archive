@@ -61,12 +61,12 @@ _We used to have a Dockerfile, but it was outdated and very slow._
 _If you need or want one, you should be able to make one using the `emscripten/emsdk` image._
 _It should only need to run `CMD ["make"]` in the lib/ directory._
 
-- Emscripten
-- `make`
-- `node`
-- `deno` (optional, used for linting)
-- `dprint` (optional, used for formatting)
-- `yarn` (optional, preferred package manager)
+-   Emscripten
+-   `make`
+-   `node`
+-   `deno` (optional, used for linting)
+-   `dprint` (optional, used for formatting)
+-   `yarn` (optional, preferred package manager)
 
 ### Steps
 
