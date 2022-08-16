@@ -4,7 +4,7 @@ BASH = emmake bash
 EMMAKE = emmake make
 EMCMAKE = emcmake cmake
 CONFIGURE = emconfigure
-LD_FLAGS = -s USE_ZLIB=1 -s USE_BZIP2=1 -s ALLOW_MEMORY_GROWTH=1 -s EXPORTED_RUNTIME_METHODS="['cwrap', 'FS']" -s EXPORTED_FUNCTIONS="['_free', \
+LD_FLAGS = -s ASYNCIFY -s ASYNCIFY_IMPORTS="['archive_wait_for_read', 'archive_wait_for_close']" -s USE_ZLIB=1 -s USE_BZIP2=1 -s ALLOW_MEMORY_GROWTH=1 -s EXPORTED_FUNCTIONS="['_free', \
 	'_archive_read_has_encrypted_entries', \
 	'_archive_read_data', \
 	'_archive_read_data_skip', \
@@ -27,7 +27,7 @@ OPENSSL_DEPENDS = $(DEPENDS_DIR)openssl/libssl.a $(DEPENDS_DIR)openssl/libcrypto
 DEPENDS = $(LIBLZMA_DEPENDS) $(LIBARCHIVE_DEPENDS) $(OPENSSL_DEPENDS)
 INCLUDE = -I$(DEPENDS_DIR)openssl/include -I$(DEPENDS_DIR)liblzma/src/liblzma/api -I$(DEPENDS_DIR)libarchive/libarchive
 
-.PHONY: all clean
+.PHONY: all build clean clean-all clean-deps
 .PRECIOUS: %/.sentinel
 
 all: ../src/archive.js
@@ -46,7 +46,7 @@ $(DEPENDS_DIR)liblzma.tar.gz: $(DEPENDS_DIR).sentinel
 $(DEPENDS_DIR)libarchive.zip: $(DEPENDS_DIR).sentinel
 	curl $(LIBARCHIVE_URL) -L -o $@
 
-## -- Build Dependencies --
+# -- Build Dependencies --
 $(LIBLZMA_DEPENDS): $(DEPENDS_DIR)liblzma.tar.gz
 	mkdir $(DEPENDS_DIR)liblzma 
 	tar xf $(DEPENDS_DIR)liblzma.tar.gz -C $(DEPENDS_DIR)liblzma --strip-components=1
@@ -75,12 +75,20 @@ $(LIBARCHIVE_DEPENDS): $(DEPENDS_DIR)libarchive.zip
 
 # -- Build Wrapper -- 
 ../src/archive.js: $(DEPENDS)
-	$(CC) -O3 $(LD_FLAGS) $(INCLUDE) main.c $(DEPENDS) -o $@
-	mv $@ $@.tmp
-	cat pre.js $@.tmp post.js > $@
-	@rm $@.tmp 
-	mkdir -p ../public
-	@mv ../src/archive.wasm ../public/
+	$(CC) -s ENVIRONMENT=worker -O3 $(LD_FLAGS) $(INCLUDE) main.c $(DEPENDS) -o $@
+	sed -i'' -e 's/ENVIRONMENT_IS_WORKER=true/ENVIRONMENT_IS_WORKER=false/g' $@ 
+	@mv $@ $@.tmp
+	@cat pre.js $@.tmp post.js > $@
+	@rm $@.tmp $@-e
+	@mkdir -p ../public
+	@mv ../src/archive.wasm ../public
+
+build: clean ../src/archive.js
 
 clean:
-	@rm -rf $(DEPENDS_DIR) ../src/archive.js ../public/archive.wasm
+	@rm -rf ../src/archive.js ../src/archive.wasm
+
+clean-deps:
+	@rm -rf $(DEPENDS_DIR)
+
+clean-all: clean clean-deps

@@ -20,8 +20,8 @@
 		"./archive.wasm": "./dist/archive.wasm"
 	},
 	"scripts": {
-		"build:wasm": "cd lib && make ../src/archive.js && cd ..",
-		"dev": "vite",
+		"build:wasm": "cd lib && make build && cd ..",
+		"dev": "vitest watch",
 		"build": "tsc && vite build",
 		"fmt": "prettier -w .",
 		"test": "vite build && vitest run"
