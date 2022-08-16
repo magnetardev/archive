@@ -9,4 +9,4 @@ src/archive.wasm
 dist
 foo
 .vscode
-public/archive.wasm
+public
